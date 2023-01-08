@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import './App.css';
 import BlockList from './components/Block/Block-List.Component';
+import TransactionList from './components/Transaction/Transaction-List.Component';
 
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
@@ -22,14 +23,23 @@ const alchemy = new Alchemy(settings);
 
 function App() {
   const [blockNumber, setBlockNumber] = useState();
-  const [tenLastBlocks, setTenLastBlock] = useState([]);
-  // const [blockList, setBlockList] = useState([]);
+  const [blockList, setBlockList] = useState([]);
+  const [transactionList, setTransactionList] = useState([]);
 
   const getBlockNumber = async () => {
     setBlockNumber(await alchemy.core.getBlockNumber());
   };
   const getBlockWithTransactions = async (bkNumber) => {
     return await alchemy.core.getBlockWithTransactions(bkNumber);
+  }
+  const getTransactionReceipt = async (hash) => {
+    return await alchemy.core.getTransactionReceipt(hash);
+  }
+  const getTransactionReceipts = async (bkNumber) => {
+    return await alchemy.core.getTransactionReceipts(bkNumber);
+  }
+  const formatUnits = (value, unit) => {
+    // return alchemy.core.formatUnits(value, unit);
   }
 
   useEffect(() => {
@@ -41,15 +51,28 @@ function App() {
       for (let i = blockNumber; i > blockNumber - 10; --i) {
         tenLastBk.push(await getBlockWithTransactions(i));
       }
-      setTenLastBlock(tenLastBk);
+      setBlockList(tenLastBk);
     };
     getTenLastBlocks();
   }, [blockNumber]);
+  useEffect(() => {
+    async function getTenLastTransactions() {
+      const firstBlockTxHash = blockList[0].transactions.map((tx) => tx.hash);
+      let tenLastTx = [];
+      for (let i = 0; i < 10; i++) {
+        tenLastTx.push(await getTransactionReceipt(firstBlockTxHash[i]));
+      }
+      console.log(tenLastTx);
+      setTransactionList(tenLastTx);
+    };
+    getTenLastTransactions();
+  }, [blockList]);
 
   return (
     <div>
       <div className="App">Block Number: {blockNumber}</div>
-      {tenLastBlocks.length ? <BlockList blocks={tenLastBlocks}/> : <div>Loading...</div>}
+      {blockList.length ? <BlockList blocks={blockList}/> : <div>Loading Blocks...</div>}
+      {transactionList.length ? <TransactionList transactions={transactionList} formatUnits={formatUnits}/> : <div>Loading Transactions...</div>}
     </div>
   );
 }

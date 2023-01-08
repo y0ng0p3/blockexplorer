@@ -9,8 +9,10 @@ function BlockItem(props) {
         <div>Bkn: {number}</div>
         <div>timestamp: {timestamp}</div>
       </div>
-      <div>nonce: {nonce}</div> 
-      <div>Txn: {txn}</div>
+      <div>
+        <div>nonce: {nonce}</div>
+        <div>Txn: {txn}</div> 
+      </div>
     </li>
   );
 }

@@ -1,17 +1,22 @@
 
 function TransactionItem(props) {
-  const { hash, index, gasUsed, from, to } = props;
+  const { hash, transactionIndex, gasUsed, from, to, status, formatUnits } = props;
 
   return (
     <li>
       <div>Tx</div>
       <div>
         <div>Hash: {hash}</div>
-        <div>Index: {index}</div>
+        <div>Status: {status}</div>
       </div>
-        <div>Gas Used: {gasUsed}</div>
-      <div>From: {from}</div> 
-      <div>To: {to}</div>
+      <div>
+        <div>From: {from}</div>
+        <div>To: {to}</div>
+      </div>
+      <div>
+        {/* <div>Gas Used: {formatUnits(gasUsed, 18)}</div> */}
+        <div>Index: {transactionIndex}</div>
+      </div>
     </li>
   );
 }
