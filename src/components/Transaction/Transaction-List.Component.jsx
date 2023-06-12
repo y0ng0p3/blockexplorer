@@ -1,4 +1,17 @@
+import styled from '@emotion/styled'
 import TransactionItem from "./Transaction-Item.Component";
+
+const Container = styled.rect`
+  padding: 32px;
+  background-color: hotpink;
+  font-size: 24px;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
+  &:hover {
+    color: white;
+  }
+`
 
 function TransactionList(props) {
   const { transactions, formatUnits } = props;
@@ -6,9 +19,12 @@ function TransactionList(props) {
   console.log({transactions, transactionItems});
 
   return (
-    <ul>
-      {transactionItems}
-    </ul>
+    <Container>
+      sdfd
+      <ul>
+        {transactionItems}
+      </ul>
+    </Container>
   );
 }
 
